@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -22,6 +24,8 @@ public class Expense {
     private Long id;
 
     @Column(name = "expense_name")
+    @NotNull(message = "expense name must not be null")
+    @Size(min = 3, message = "expense name must be at least 3 characters")
     private String name;
 
     private String description;
