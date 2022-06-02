@@ -3,6 +3,7 @@ package com.api.expensetrack.controller;
 import com.api.expensetrack.entity.Expense;
 import com.api.expensetrack.service.ExpenseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +20,20 @@ public class ExpenseController {
 
     @GetMapping("/expenses/{id}")
     public Expense getExpenseById(@PathVariable("id") Long id) {
-        return null;
+        return expenseService.getExpenseById(id);
     }
-
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @DeleteMapping("/expenses")
-    public Expense deleteExpenseById(@RequestParam("id") Long id) {
-        return null;
+    public void deleteExpenseById(@RequestParam("id") Long id) {
+        expenseService.deleteExpenseById(id);
+    }
+    @ResponseStatus(value = HttpStatus.CREATED)
+    @PostMapping("/expenses")
+    public Expense saveExpenseDetails(@RequestBody Expense expense) {
+        return expenseService.saveExpenseDetails(expense);
+    }
+    @PutMapping("/expenses/{id}")
+    public Expense updateExpenseDetails(@PathVariable("id") Long id, @RequestBody Expense expense) {
+        return expenseService.updateExpenseDetails(id, expense);
     }
 }
