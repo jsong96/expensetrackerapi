@@ -1,8 +1,11 @@
 package com.api.expensetrack.service;
 
 import com.api.expensetrack.entity.Expense;
+import com.api.expensetrack.exception.ExpenseNotFoundException;
 import com.api.expensetrack.repository.ExpenseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +18,8 @@ public class ExpenseServiceImpl implements ExpenseService{
     private ExpenseRepository expenseRepository;
 
     @Override
-    public List<Expense> getAllExpenses() {
-        return expenseRepository.findAll();
+    public Page<Expense> getAllExpenses(Pageable page) {
+        return expenseRepository.findAll(page);
     }
 
     @Override
@@ -25,7 +28,7 @@ public class ExpenseServiceImpl implements ExpenseService{
         if (expense.isPresent()) {
             return expense.get();
         }
-        throw new RuntimeException("Expense with the id does not exist");
+        throw new ExpenseNotFoundException("Expense with the id does not exist");
     }
 
     @Override
