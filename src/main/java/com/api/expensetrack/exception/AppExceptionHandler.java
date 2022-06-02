@@ -12,8 +12,8 @@ import java.util.Date;
 @ControllerAdvice
 public class AppExceptionHandler {
 
-    @ExceptionHandler(ExpenseNotFoundException.class)
-    public ResponseEntity<Error> handleExpenseNotFoundException(ExpenseNotFoundException e, WebRequest request) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Error> handleExpenseNotFoundException(ResourceNotFoundException e, WebRequest request) {
         Error error = new Error();
         error.setStatusCode(HttpStatus.NOT_FOUND.value());
         error.setMessage(e.getMessage());
