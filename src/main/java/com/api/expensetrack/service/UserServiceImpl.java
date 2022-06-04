@@ -2,6 +2,7 @@ package com.api.expensetrack.service;
 
 import com.api.expensetrack.entity.User;
 import com.api.expensetrack.entity.UserDTO;
+import com.api.expensetrack.exception.ItemAlreadyExistsException;
 import com.api.expensetrack.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(UserDTO user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new ItemAlreadyExistsException("Email is already being used");
+        }
         User newUser = new User();
         BeanUtils.copyProperties(user, newUser);
         return userRepository.save(newUser);

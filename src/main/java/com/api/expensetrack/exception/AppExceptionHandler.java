@@ -48,6 +48,15 @@ public class AppExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Error>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(ItemAlreadyExistsException.class)
+    public ResponseEntity<Error> handleItemExistsException(ItemAlreadyExistsException e, WebRequest request) {
+        Error error = new Error();
+        error.setStatusCode(HttpStatus.CONFLICT.value());
+        error.setMessage(e.getMessage());
+        error.setTimestamp(new Date());
+        return new ResponseEntity<Error>(error, HttpStatus.CONFLICT);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
