@@ -3,6 +3,7 @@ package com.api.expensetrack.service;
 import com.api.expensetrack.entity.User;
 import com.api.expensetrack.entity.UserDTO;
 import com.api.expensetrack.exception.ItemAlreadyExistsException;
+import com.api.expensetrack.exception.ResourceNotFoundException;
 import com.api.expensetrack.repository.UserRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +24,26 @@ public class UserServiceImpl implements UserService {
         User newUser = new User();
         BeanUtils.copyProperties(user, newUser);
         return userRepository.save(newUser);
+    }
+
+    @Override
+    public User readUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
+
+    @Override
+    public User updateUser(UserDTO user, Long id) {
+        User existingUser = readUser(id);
+        existingUser.setName(user.getName() != null ? user.getName() : existingUser.getName());
+        existingUser.setEmail(user.getEmail() != null ? user.getEmail() : existingUser.getEmail());
+        existingUser.setPassword(user.getPassword() != null ? user.getPassword() : existingUser.getPassword());
+        existingUser.setAge(user.getAge() != null ? user.getAge() : existingUser.getAge());
+        return userRepository.save(existingUser);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        User existingUser = readUser(id);
+        userRepository.delete(existingUser);
     }
 }
